@@ -1,0 +1,2731 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Interview History | AI Interviewer</title>
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <style>
+
+        /* =========================================================
+           GLOBAL RESET
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Arial,
+                sans-serif;
+
+            color: #f8fafc;
+
+            background:
+                radial-gradient(
+                    circle at 10% 10%,
+                    rgba(99, 102, 241, 0.20),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 90% 10%,
+                    rgba(139, 92, 246, 0.16),
+                    transparent 30%
+                ),
+
+                radial-gradient(
+                    circle at 50% 100%,
+                    rgba(59, 130, 246, 0.10),
+                    transparent 35%
+                ),
+
+                #070a12;
+
+            line-height: 1.5;
+
+            overflow-x: hidden;
+        }
+
+
+        body::before {
+
+            content: "";
+
+            position: fixed;
+
+            inset: 0;
+
+            pointer-events: none;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255,255,255,0.025),
+                    transparent 40%
+                );
+
+            z-index: -1;
+        }
+
+
+        a {
+            color: inherit;
+        }
+
+
+        button,
+        a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+
+        /* =========================================================
+           SCROLLBAR
+        ========================================================= */
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+
+        ::-webkit-scrollbar-track {
+            background: #070a12;
+        }
+
+
+        ::-webkit-scrollbar-thumb {
+
+            background:
+                linear-gradient(
+                    #6366f1,
+                    #8b5cf6
+                );
+
+            border-radius: 20px;
+        }
+
+
+        /* =========================================================
+           MAIN CONTAINER
+        ========================================================= */
+
+        .history-container {
+
+            width: 100%;
+
+            max-width: 1250px;
+
+            margin: 0 auto;
+
+            padding: 45px 30px 70px;
+        }
+
+
+        /* =========================================================
+           PAGE HEADER
+        ========================================================= */
+
+        .history-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 20px;
+
+            margin-bottom: 38px;
+        }
+
+
+        .history-title {
+
+            min-width: 0;
+        }
+
+
+        .history-title h1 {
+
+            font-size: 38px;
+
+            line-height: 1.1;
+
+            font-weight: 800;
+
+            letter-spacing: -1px;
+
+            color: #ffffff;
+        }
+
+
+        .history-title p {
+
+            margin-top: 10px;
+
+            color: #94a3b8;
+
+            font-size: 15px;
+        }
+
+
+        .history-home-btn {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 8px;
+
+            padding: 11px 18px;
+
+            border-radius: 12px;
+
+            text-decoration: none;
+
+            color: #e2e8f0;
+
+            background:
+                rgba(255,255,255,0.055);
+
+            border:
+                1px solid rgba(255,255,255,0.10);
+
+            backdrop-filter: blur(15px);
+
+            transition:
+                transform 0.25s ease,
+                background 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+
+        .history-home-btn:hover {
+
+            transform: translateY(-2px);
+
+            background:
+                rgba(99,102,241,0.14);
+
+            border-color:
+                rgba(129,140,248,0.35);
+        }
+
+
+        /* =========================================================
+           ANALYTICS GRID
+        ========================================================= */
+
+        .analytics-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================================================
+           ANALYTICS CARD
+        ========================================================= */
+
+        .analytics-card {
+
+            position: relative;
+
+            min-height: 180px;
+
+            padding: 24px;
+
+            overflow: hidden;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.075),
+                    rgba(255,255,255,0.025)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.09);
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 18px 45px rgba(0,0,0,0.20);
+
+            transition:
+                transform 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+
+        .analytics-card::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 120px;
+
+            height: 120px;
+
+            top: -60px;
+
+            right: -60px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(99,102,241,0.15);
+
+            filter: blur(10px);
+        }
+
+
+        .analytics-card:hover {
+
+            transform: translateY(-5px);
+
+            border-color:
+                rgba(129,140,248,0.30);
+
+            box-shadow:
+                0 22px 55px rgba(0,0,0,0.30);
+        }
+
+
+        .analytics-icon {
+
+            position: relative;
+
+            width: 48px;
+
+            height: 48px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin-bottom: 18px;
+
+            border-radius: 14px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(99,102,241,0.20),
+                    rgba(139,92,246,0.12)
+                );
+
+            border:
+                1px solid rgba(129,140,248,0.18);
+
+            font-size: 22px;
+        }
+
+
+        .analytics-label {
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+            margin-bottom: 5px;
+        }
+
+
+        .analytics-value {
+
+            position: relative;
+
+            color: #ffffff;
+
+            font-size: 31px;
+
+            line-height: 1.2;
+
+            font-weight: 800;
+
+            letter-spacing: -0.5px;
+        }
+
+
+        .analytics-value .score-unit {
+
+            color: #94a3b8;
+
+            font-size: 13px;
+
+            font-weight: 500;
+
+            margin-left: 4px;
+        }
+
+
+        .analytics-subtitle {
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            margin-top: 6px;
+        }
+
+
+        /* =========================================================
+           PERFORMANCE DASHBOARD
+        ========================================================= */
+
+        .performance-dashboard {
+
+            display: grid;
+
+            grid-template-columns:
+                minmax(0, 1.35fr)
+                minmax(0, 1fr);
+
+            gap: 20px;
+
+            margin-bottom: 35px;
+        }
+
+
+        .performance-panel {
+
+            position: relative;
+
+            padding: 28px;
+
+            overflow: hidden;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.065),
+                    rgba(255,255,255,0.025)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.09);
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 18px 50px rgba(0,0,0,0.20);
+        }
+
+
+        .performance-panel::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 180px;
+
+            height: 180px;
+
+            right: -90px;
+
+            bottom: -90px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(99,102,241,0.10);
+
+            filter: blur(25px);
+
+            pointer-events: none;
+        }
+
+
+        .performance-panel h2 {
+
+            position: relative;
+
+            z-index: 1;
+
+            color: #ffffff;
+
+            font-size: 21px;
+
+            font-weight: 750;
+        }
+
+
+        .performance-panel-subtitle {
+
+            position: relative;
+
+            z-index: 1;
+
+            margin-top: 7px;
+
+            margin-bottom: 25px;
+
+            color: #94a3b8;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           PERFORMANCE MAIN
+        ========================================================= */
+
+        .performance-main {
+
+            position: relative;
+
+            z-index: 1;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 25px;
+        }
+
+
+        .performance-score {
+
+            color: #ffffff;
+
+            font-size: 55px;
+
+            line-height: 1;
+
+            font-weight: 850;
+
+            letter-spacing: -2px;
+        }
+
+
+        .performance-score span {
+
+            color: #64748b;
+
+            font-size: 17px;
+
+            font-weight: 500;
+
+            letter-spacing: 0;
+        }
+
+
+        .performance-level {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            gap: 5px;
+
+            margin-top: 13px;
+
+            padding: 6px 11px;
+
+            border-radius: 20px;
+
+            color: #a5b4fc;
+
+            background:
+                rgba(99,102,241,0.12);
+
+            border:
+                1px solid rgba(99,102,241,0.18);
+
+            font-size: 13px;
+
+            font-weight: 650;
+        }
+
+
+        /* =========================================================
+           PERFORMANCE CHANGE
+        ========================================================= */
+
+        .performance-change {
+
+            text-align: right;
+
+            padding: 15px 18px;
+
+            border-radius: 15px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid rgba(255,255,255,0.06);
+        }
+
+
+        .performance-change-label {
+
+            display: block;
+
+            color: #64748b;
+
+            font-size: 11px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .performance-change-value {
+
+            font-size: 25px;
+
+            font-weight: 800;
+        }
+
+
+        .performance-positive {
+            color: #34d399;
+        }
+
+
+        .performance-negative {
+            color: #fb7185;
+        }
+
+
+        .performance-neutral {
+            color: #94a3b8;
+        }
+
+
+        /* =========================================================
+           PERFORMANCE METRICS
+        ========================================================= */
+
+        .performance-metrics {
+
+            position: relative;
+
+            z-index: 1;
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 12px;
+        }
+
+
+        .performance-metric {
+
+            padding: 16px;
+
+            border-radius: 14px;
+
+            background:
+                rgba(255,255,255,0.035);
+
+            border:
+                1px solid rgba(255,255,255,0.06);
+
+            transition:
+                background 0.25s ease,
+                border-color 0.25s ease;
+        }
+
+
+        .performance-metric:hover {
+
+            background:
+                rgba(99,102,241,0.08);
+
+            border-color:
+                rgba(129,140,248,0.18);
+        }
+
+
+        .performance-metric span {
+
+            display: block;
+
+            color: #64748b;
+
+            font-size: 11px;
+
+            margin-bottom: 6px;
+        }
+
+
+        .performance-metric strong {
+
+            color: #f8fafc;
+
+            font-size: 21px;
+
+            font-weight: 750;
+        }
+
+
+        /* =========================================================
+           HISTORY SECTION
+        ========================================================= */
+
+        .history-section {
+
+            margin-top: 10px;
+        }
+
+
+        .history-section-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+
+        .history-section-header h2 {
+
+            color: #ffffff;
+
+            font-size: 23px;
+
+            font-weight: 750;
+        }
+
+
+        .history-section-header p {
+
+            margin-top: 4px;
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           INTERVIEW GRID
+        ========================================================= */
+
+        .interview-grid {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 18px;
+        }
+
+
+        /* =========================================================
+           INTERVIEW CARD
+        ========================================================= */
+
+        .interview-card {
+
+            position: relative;
+
+            padding: 23px;
+
+            overflow: hidden;
+
+            border-radius: 20px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.055),
+                    rgba(255,255,255,0.022)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            backdrop-filter: blur(15px);
+
+            transition:
+                transform 0.3s ease,
+                border-color 0.3s ease,
+                box-shadow 0.3s ease;
+        }
+
+
+        .interview-card:hover {
+
+            transform: translateY(-4px);
+
+            border-color:
+                rgba(129,140,248,0.25);
+
+            box-shadow:
+                0 18px 45px rgba(0,0,0,0.25);
+        }
+
+
+        /* =========================================================
+           INTERVIEW CARD HEADER
+        ========================================================= */
+
+        .interview-card-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: flex-start;
+
+            gap: 15px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .interview-role {
+
+            color: #ffffff;
+
+            font-size: 18px;
+
+            font-weight: 700;
+
+            word-break: break-word;
+        }
+
+
+        .interview-score {
+
+            flex-shrink: 0;
+
+            color: #a5b4fc;
+
+            font-size: 24px;
+
+            font-weight: 800;
+        }
+
+
+        .interview-score span {
+
+            color: #64748b;
+
+            font-size: 11px;
+
+            font-weight: 500;
+        }
+
+
+        /* =========================================================
+           INTERVIEW INFO
+        ========================================================= */
+
+        .interview-info {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(2, minmax(0, 1fr));
+
+            gap: 10px;
+
+            margin-bottom: 20px;
+        }
+
+
+        .info-item {
+
+            padding: 12px 13px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(255,255,255,0.032);
+
+            border:
+                1px solid rgba(255,255,255,0.045);
+        }
+
+
+        .info-label {
+
+            display: block;
+
+            color: #64748b;
+
+            font-size: 10px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+
+            margin-bottom: 4px;
+        }
+
+
+        .info-value {
+
+            display: block;
+
+            color: #cbd5e1;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            overflow-wrap: anywhere;
+        }
+
+
+        /* =========================================================
+           INTERVIEW FOOTER
+        ========================================================= */
+
+        .interview-footer {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding-top: 15px;
+
+            border-top:
+                1px solid rgba(255,255,255,0.07);
+        }
+
+
+        .questions-count {
+
+            color: #64748b;
+
+            font-size: 12px;
+        }
+
+
+        .questions-count strong {
+
+            color: #cbd5e1;
+        }
+
+
+        .view-details {
+
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 9px 14px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            color: #c4b5fd;
+
+            background:
+                rgba(99,102,241,0.12);
+
+            border:
+                1px solid rgba(99,102,241,0.15);
+
+            font-size: 12px;
+
+            font-weight: 650;
+
+            transition:
+                transform 0.25s ease,
+                background 0.25s ease;
+        }
+
+
+        .view-details:hover {
+
+            transform: translateX(2px);
+
+            background:
+                rgba(99,102,241,0.22);
+        }
+
+
+        /* =========================================================
+           EMPTY STATE
+        ========================================================= */
+
+        .empty-state {
+
+            padding: 75px 25px;
+
+            text-align: center;
+
+            border-radius: 22px;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    rgba(255,255,255,0.055),
+                    rgba(255,255,255,0.02)
+                );
+
+            border:
+                1px solid rgba(255,255,255,0.08);
+
+            backdrop-filter: blur(15px);
+        }
+
+
+        .empty-icon {
+
+            width: 70px;
+
+            height: 70px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            margin: 0 auto 20px;
+
+            border-radius: 20px;
+
+            background:
+                rgba(99,102,241,0.12);
+
+            font-size: 34px;
+        }
+
+
+        .empty-state h2 {
+
+            color: #ffffff;
+
+            font-size: 23px;
+
+            font-weight: 750;
+        }
+
+
+        .empty-state p {
+
+            max-width: 450px;
+
+            margin: 9px auto 0;
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================================
+           ANIMATION
+        ========================================================= */
+
+        .analytics-card,
+        .performance-panel,
+        .interview-card {
+
+            animation:
+                fadeUp 0.6s ease both;
+        }
+
+
+        .analytics-card:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+
+        .analytics-card:nth-child(2) {
+            animation-delay: 0.10s;
+        }
+
+
+        .analytics-card:nth-child(3) {
+            animation-delay: 0.15s;
+        }
+
+
+        .analytics-card:nth-child(4) {
+            animation-delay: 0.20s;
+        }
+
+
+        @keyframes fadeUp {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    translateY(15px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    translateY(0);
+            }
+        }
+
+
+        /* =========================================================
+           TABLET
+        ========================================================= */
+
+        @media (max-width: 1000px) {
+
+            .analytics-grid {
+
+                grid-template-columns:
+                    repeat(2, minmax(0, 1fr));
+            }
+
+
+            .performance-dashboard {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .interview-grid {
+
+                grid-template-columns:
+                    1fr;
+            }
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 650px) {
+
+            .history-container {
+
+                padding:
+                    30px 15px 50px;
+            }
+
+
+            .history-header {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                margin-bottom: 30px;
+            }
+
+
+            .history-title h1 {
+
+                font-size: 30px;
+            }
+
+
+            .history-home-btn {
+
+                width: 100%;
+            }
+
+
+            .analytics-grid {
+
+                grid-template-columns:
+                    1fr;
+
+                gap: 14px;
+            }
+
+
+            .analytics-card {
+
+                min-height: 160px;
+            }
+
+
+            .performance-panel {
+
+                padding: 22px;
+            }
+
+
+            .performance-main {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+            }
+
+
+            .performance-score {
+
+                font-size: 45px;
+            }
+
+
+            .performance-change {
+
+                width: 100%;
+
+                text-align: left;
+            }
+
+
+            .performance-metrics {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .interview-info {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .interview-footer {
+
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+
+            .view-details {
+
+                width: 100%;
+            }
+        }
+        /* =========================================================
+   STEP 4 - PERFORMANCE CHART
+========================================================= */
+
+.chart-section {
+
+    position: relative;
+
+    margin-top: 25px;
+
+    margin-bottom: 35px;
+
+    padding: 28px;
+
+    border-radius: 22px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255,255,255,0.065),
+            rgba(255,255,255,0.025)
+        );
+
+    border:
+        1px solid rgba(255,255,255,0.09);
+
+    backdrop-filter: blur(18px);
+
+    box-shadow:
+        0 18px 50px rgba(0,0,0,0.20);
+
+    overflow: hidden;
+}
+
+
+.chart-section::before {
+
+    content: "";
+
+    position: absolute;
+
+    width: 220px;
+
+    height: 220px;
+
+    right: -100px;
+
+    top: -100px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(99,102,241,0.10);
+
+    filter: blur(25px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   CHART HEADER
+========================================================= */
+
+.chart-header {
+
+    position: relative;
+
+    z-index: 1;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    margin-bottom: 25px;
+}
+
+
+.chart-title h2 {
+
+    color: #ffffff;
+
+    font-size: 21px;
+
+    font-weight: 750;
+}
+
+
+.chart-title p {
+
+    margin-top: 6px;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+}
+
+
+.chart-badge {
+
+    padding: 7px 13px;
+
+    border-radius: 20px;
+
+    color: #a5b4fc;
+
+    background:
+        rgba(99,102,241,0.12);
+
+    border:
+        1px solid rgba(99,102,241,0.20);
+
+    font-size: 12px;
+
+    font-weight: 650;
+
+    white-space: nowrap;
+}
+
+
+/* =========================================================
+   CHART CONTAINER
+========================================================= */
+
+.chart-container {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 360px;
+
+    z-index: 1;
+}
+
+
+.chart-container canvas {
+
+    width: 100% !important;
+
+    height: 100% !important;
+}
+
+
+/* =========================================================
+   EMPTY CHART
+========================================================= */
+
+.chart-empty {
+
+    height: 100%;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+}
+
+
+.chart-empty-icon {
+
+    width: 65px;
+
+    height: 65px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    margin-bottom: 15px;
+
+    border-radius: 18px;
+
+    background:
+        rgba(99,102,241,0.12);
+
+    font-size: 30px;
+}
+
+
+.chart-empty h3 {
+
+    color: #ffffff;
+
+    font-size: 18px;
+
+    margin-bottom: 6px;
+}
+
+
+.chart-empty p {
+
+    color: #64748b;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   CHART RESPONSIVE
+========================================================= */
+
+@media (max-width: 650px) {
+
+    .chart-section {
+
+        padding: 20px;
+
+    }
+
+
+    .chart-header {
+
+        flex-direction: column;
+
+        align-items: flex-start;
+
+    }
+
+
+    .chart-container {
+
+        height: 280px;
+
+    }
+
+  }
+</style>
+
+<style>
+
+    /* your existing CSS */
+
+
+    /* =========================================================
+       STEP 5 - PDF DOWNLOAD BUTTON
+    ========================================================= */
+
+    .interview-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .download-pdf {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 14px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #c4b5fd;
+        background: rgba(139, 92, 246, 0.10);
+        border: 1px solid rgba(139, 92, 246, 0.18);
+        font-size: 12px;
+        font-weight: 650;
+        transition:
+            transform 0.25s ease,
+            background 0.25s ease,
+            border-color 0.25s ease;
+    }
+
+    .download-pdf:hover {
+        transform: translateY(-2px);
+        background: rgba(139, 92, 246, 0.20);
+        border-color: rgba(167, 139, 250, 0.35);
+    }
+
+    @media (max-width: 650px) {
+
+        .interview-actions {
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        .interview-actions a {
+            width: 100%;
+        }
+
+    }
+
+</style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+
+<body>
+
+
+    <main class="history-container">
+
+
+        <!-- =====================================================
+             PAGE HEADER
+        ====================================================== -->
+
+        <header class="history-header">
+
+            <div class="history-title">
+
+                <h1>
+                    Interview History
+                </h1>
+
+                <p>
+                    Review your interview performance
+                    and track your progress.
+                </p>
+
+            </div>
+
+
+            <a
+                href="/"
+                class="history-home-btn"
+            >
+                ← Back to Home
+            </a>
+
+        </header>
+
+
+
+        <!-- =====================================================
+             ANALYTICS CARDS
+        ====================================================== -->
+
+        <section class="analytics-grid">
+
+
+            <!-- TOTAL INTERVIEWS -->
+
+            <div class="analytics-card">
+
+                <div class="analytics-icon">
+                    🎯
+                </div>
+
+                <div class="analytics-label">
+                    Total Interviews
+                </div>
+
+                <div
+                    class="analytics-value counter"
+                    data-value="{{ statistics.total_interviews }}"
+                    data-decimals="0"
+                >
+                    0
+                </div>
+
+                <div class="analytics-subtitle">
+                    Interviews completed
+                </div>
+
+            </div>
+
+
+
+            <!-- OVERALL AVERAGE -->
+
+            <div class="analytics-card">
+
+                <div class="analytics-icon">
+                    📊
+                </div>
+
+                <div class="analytics-label">
+                    Overall Average
+                </div>
+
+                <div class="analytics-value">
+
+                    <span
+                        class="counter"
+                        data-value="{{ statistics.overall_average }}"
+                        data-decimals="2"
+                    >
+                        0
+                    </span>
+
+                    <span class="score-unit">
+                        / 10
+                    </span>
+
+                </div>
+
+                <div class="analytics-subtitle">
+                    Average interview score
+                </div>
+
+            </div>
+
+
+
+            <!-- BEST SCORE -->
+
+            <div class="analytics-card">
+
+                <div class="analytics-icon">
+                    🏆
+                </div>
+
+                <div class="analytics-label">
+                    Best Score
+                </div>
+
+                <div class="analytics-value">
+
+                    <span
+                        class="counter"
+                        data-value="{{ statistics.best_score }}"
+                        data-decimals="2"
+                    >
+                        0
+                    </span>
+
+                    <span class="score-unit">
+                        / 10
+                    </span>
+
+                </div>
+
+                <div class="analytics-subtitle">
+                    Highest interview score
+                </div>
+
+            </div>
+
+
+
+            <!-- QUESTIONS ANSWERED -->
+
+            <div class="analytics-card">
+
+                <div class="analytics-icon">
+                    💬
+                </div>
+
+                <div class="analytics-label">
+                    Questions Answered
+                </div>
+
+                <div
+                    class="analytics-value counter"
+                    data-value="{{ statistics.total_questions_answered }}"
+                    data-decimals="0"
+                >
+                    0
+                </div>
+
+                <div class="analytics-subtitle">
+                    Total questions answered
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- =====================================================
+             STEP 3 PERFORMANCE DASHBOARD
+        ====================================================== -->
+
+        {% if performance.performance_level != "No Data" %}
+
+        <section class="performance-dashboard">
+
+
+            <!-- =================================================
+                 PERFORMANCE OVERVIEW
+            ================================================== -->
+
+            <div class="performance-panel">
+
+                <h2>
+                    Performance Overview
+                </h2>
+
+                <p class="performance-panel-subtitle">
+
+                    Your latest interview performance
+                    compared with previous interviews.
+
+                </p>
+
+
+                <div class="performance-main">
+
+
+                    <div>
+
+                        <div class="performance-score">
+
+                            <span
+                                class="counter"
+                                data-value="{{ performance.recent_average }}"
+                                data-decimals="2"
+                            >
+                                0
+                            </span>
+
+                            <span>
+                                / 10
+                            </span>
+
+                        </div>
+
+
+                        <div class="performance-level">
+
+                            ●
+
+                            {{ performance.performance_level }}
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- PERFORMANCE CHANGE -->
+
+                    <div class="performance-change">
+
+                        <span class="performance-change-label">
+                            Performance Change
+                        </span>
+
+
+                        {% if performance.improvement > 0 %}
+
+                        <div
+                            class="
+                                performance-change-value
+                                performance-positive
+                            "
+                        >
+
+                            ↑
+                            {{ "%.1f"|format(
+                                performance.improvement
+                            ) }}%
+
+                        </div>
+
+
+                        {% elif performance.improvement < 0 %}
+
+                        <div
+                            class="
+                                performance-change-value
+                                performance-negative
+                            "
+                        >
+
+                            ↓
+                            {{ "%.1f"|format(
+                                performance.improvement|abs
+                            ) }}%
+
+                        </div>
+
+
+                        {% else %}
+
+                        <div
+                            class="
+                                performance-change-value
+                                performance-neutral
+                            "
+                        >
+                            0%
+                        </div>
+
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================================
+                 PERFORMANCE METRICS
+            ================================================== -->
+
+            <div class="performance-panel">
+
+                <h2>
+                    Performance Metrics
+                </h2>
+
+                <p class="performance-panel-subtitle">
+
+                    Key indicators from your interview history.
+
+                </p>
+
+
+                <div class="performance-metrics">
+
+
+                    <!-- PREVIOUS AVERAGE -->
+
+                    <div class="performance-metric">
+
+                        <span>
+                            Previous Average
+                        </span>
+
+                        <strong>
+
+                            {{ "%.2f"|format(
+                                performance.previous_average
+                            ) }}
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- BEST SCORE -->
+
+                    <div class="performance-metric">
+
+                        <span>
+                            Best Score
+                        </span>
+
+                        <strong>
+
+                            {{ "%.2f"|format(
+                                statistics.best_score
+                            ) }}
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- LOWEST SCORE -->
+
+                    <div class="performance-metric">
+
+                        <span>
+                            Lowest Score
+                        </span>
+
+                        <strong>
+
+                            {{ "%.2f"|format(
+                                statistics.lowest_score
+                            ) }}
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <!-- AVERAGE QUESTIONS -->
+
+                    <div class="performance-metric">
+
+                        <span>
+                            Avg Questions
+                        </span>
+
+                        <strong>
+
+                            {{ "%.1f"|format(
+                                statistics.average_questions
+                            ) }}
+
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        {% endif %}
+        <!-- =====================================================
+     STEP 4 - PERFORMANCE TREND
+====================================================== -->
+
+<section class="chart-section">
+
+
+    <!-- CHART HEADER -->
+
+    <div class="chart-header">
+
+        <div class="chart-title">
+
+            <h2>
+                Performance Trend
+            </h2>
+
+            <p>
+                Track your interview scores across completed interviews.
+            </p>
+
+        </div>
+
+
+        <div class="chart-badge">
+
+            Score / 10
+
+        </div>
+
+    </div>
+
+
+
+    <!-- CHART -->
+
+    {% if score_distribution %}
+
+    <div class="chart-container">
+
+        <canvas
+            id="performanceChart"
+        ></canvas>
+
+    </div>
+
+
+    {% else %}
+
+
+    <!-- NO DATA -->
+
+    <div class="chart-container">
+
+        <div class="chart-empty">
+
+            <div class="chart-empty-icon">
+                📈
+            </div>
+
+            <h3>
+                No Performance Data
+            </h3>
+
+            <p>
+                Complete an interview to see your performance trend.
+            </p>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+  </section>
+
+
+        <!-- =====================================================
+             PREVIOUS INTERVIEWS
+        ====================================================== -->
+
+        <section class="history-section">
+
+
+            <div class="history-section-header">
+
+                <div>
+
+                    <h2>
+                        Previous Interviews
+                    </h2>
+
+                    <p>
+                        Your completed interview sessions
+                    </p>
+
+                </div>
+
+            </div>
+
+
+
+            {% if interviews %}
+
+
+            <!-- =================================================
+                 INTERVIEW CARDS
+            ================================================== -->
+
+            <div class="interview-grid">
+
+
+                {% for interview in interviews %}
+
+
+                <article class="interview-card">
+
+
+                    <!-- CARD HEADER -->
+
+                    <div class="interview-card-header">
+
+
+                        <div class="interview-role">
+
+                            {{ interview[1] }}
+
+                        </div>
+
+
+                        <div class="interview-score">
+
+                            {{ "%.2f"|format(
+                                interview[7]
+                            ) }}
+
+                            <span>
+                                / 10
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CARD INFORMATION -->
+
+                    <div class="interview-info">
+
+
+                        <!-- EXPERIENCE -->
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Experience
+                            </span>
+
+                            <span class="info-value">
+                                {{ interview[2] }}
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- DIFFICULTY -->
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Difficulty
+                            </span>
+
+                            <span class="info-value">
+                                {{ interview[3] }}
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- QUESTIONS -->
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Questions
+                            </span>
+
+                            <span class="info-value">
+                                {{ interview[4] }}
+                            </span>
+
+                        </div>
+
+
+
+                        <!-- ANSWERED -->
+
+                        <div class="info-item">
+
+                            <span class="info-label">
+                                Answered
+                            </span>
+
+                            <span class="info-value">
+                                {{ interview[5] }}
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <!-- CARD FOOTER -->
+                   <div class="interview-actions">
+
+    <a
+        href="/history/{{ interview[0] }}"
+        class="view-details"
+    >
+        View Details →
+    </a>
+
+    <a
+        href="/history/{{ interview[0] }}/pdf"
+        class="download-pdf"
+    >
+        Download PDF ↓
+    </a>
+
+</div>
+
+                </article>
+
+
+                {% endfor %}
+
+            </div>
+
+
+            {% else %}
+
+
+            <!-- =================================================
+                 EMPTY STATE
+            ================================================== -->
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    📋
+                </div>
+
+                <h2>
+                    No Interviews Yet
+                </h2>
+
+                <p>
+
+                    Complete your first AI interview
+                    to see your performance here.
+
+                </p>
+
+            </div>
+
+
+            {% endif %}
+
+        </section>
+
+
+    </main>
+
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+         Step 3 only:
+         Animated statistics.
+         Charts will be added in Step 4.
+    ========================================================== -->
+
+    <script>
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+
+                const counters =
+                    document.querySelectorAll(
+                        ".counter"
+                    );
+
+
+                counters.forEach(function (counter) {
+
+                    const target =
+                        parseFloat(
+                            counter.dataset.value
+                        );
+
+
+                    const decimals =
+                        parseInt(
+                            counter.dataset.decimals || "0"
+                        );
+
+
+                    if (
+                        Number.isNaN(target)
+                    ) {
+
+                        counter.textContent =
+                            "0";
+
+                        return;
+                    }
+
+
+                    const duration = 900;
+
+                    const startTime =
+                        performance.now();
+
+
+                    function updateCounter(
+                        currentTime
+                    ) {
+
+                        const elapsed =
+                            currentTime -
+                            startTime;
+
+
+                        const progress =
+                            Math.min(
+                                elapsed / duration,
+                                1
+                            );
+
+
+                        /* Smooth ease-out */
+
+                        const eased =
+                            1 -
+                            Math.pow(
+                                1 - progress,
+                                3
+                            );
+
+
+                        const currentValue =
+                            target * eased;
+
+
+                        counter.textContent =
+                            currentValue.toFixed(
+                                decimals
+                            );
+
+
+                        if (
+                            progress < 1
+                        ) {
+
+                            requestAnimationFrame(
+                                updateCounter
+                            );
+
+                        } else {
+
+                            counter.textContent =
+                                target.toFixed(
+                                    decimals
+                                );
+
+                        }
+
+                    }
+
+
+                    requestAnimationFrame(
+                        updateCounter
+                    );
+
+                });
+
+
+                /* =========================================
+                   INTERVIEW CARD HOVER ACCESSIBILITY
+                ========================================= */
+
+                const cards =
+                    document.querySelectorAll(
+                        ".interview-card"
+                    );
+
+
+                cards.forEach(function (card) {
+
+                    card.addEventListener(
+                        "mouseenter",
+                        function () {
+
+                            card.style.transform =
+                                "translateY(-4px)";
+
+                        }
+                    );
+
+
+                    card.addEventListener(
+                        "mouseleave",
+                        function () {
+
+                            card.style.transform =
+                                "";
+
+                        }
+                    );
+
+                });
+
+            }
+        );
+        </script>
+
+        {% if score_distribution %}
+
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function () {
+
+
+        /* =====================================================
+           GET SCORE DATA FROM FLASK
+        ===================================================== */
+
+        const scoreData =
+            JSON.parse('{{ score_distribution | tojson | safe }}');
+
+
+        /* =====================================================
+           CREATE INTERVIEW LABELS
+        ===================================================== */
+
+        const labels =
+            scoreData.map(
+                function (_, index) {
+
+                    return "Interview " + (index + 1);
+
+                }
+            );
+
+
+        /* =====================================================
+           GET CANVAS
+        ===================================================== */
+
+        const canvas =
+            document.getElementById(
+                "performanceChart"
+            );
+
+
+        if (!canvas) {
+
+            return;
+
+        }
+
+
+        const ctx =
+            canvas.getContext("2d");
+
+
+        /* =====================================================
+           CREATE GRADIENT
+        ===================================================== */
+
+        const gradient =
+            ctx.createLinearGradient(
+                0,
+                0,
+                0,
+                360
+            );
+
+
+        gradient.addColorStop(
+            0,
+            "rgba(99, 102, 241, 0.30)"
+        );
+
+
+        gradient.addColorStop(
+            1,
+            "rgba(99, 102, 241, 0.01)"
+        );
+
+
+        /* =====================================================
+           CREATE PERFORMANCE CHART
+        ===================================================== */
+
+        new Chart(
+            ctx,
+            {
+
+                type: "line",
+
+
+                data: {
+
+                    labels: labels,
+
+
+                    datasets: [
+
+                        {
+
+                            label:
+                                "Interview Score",
+
+
+                            data:
+                                scoreData,
+
+
+                            borderColor:
+                                "#818cf8",
+
+
+                            backgroundColor:
+                                gradient,
+
+
+                            borderWidth: 3,
+
+
+                            fill: true,
+
+
+                            tension: 0.35,
+
+
+                            pointRadius: 5,
+
+
+                            pointHoverRadius: 8,
+
+
+                            pointBackgroundColor:
+                                "#a5b4fc",
+
+
+                            pointBorderColor:
+                                "#ffffff",
+
+
+                            pointBorderWidth: 2
+
+                        }
+
+                    ]
+
+                },
+
+
+                options: {
+
+                    responsive: true,
+
+
+                    maintainAspectRatio: false,
+
+
+                    interaction: {
+
+                        intersect: false,
+
+                        mode: "index"
+
+                    },
+
+
+                    scales: {
+
+                        x: {
+
+                            grid: {
+
+                                color:
+                                    "rgba(255,255,255,0.05)"
+
+                            },
+
+
+                            ticks: {
+
+                                color:
+                                    "#94a3b8",
+
+                                font: {
+
+                                    size: 11
+
+                                }
+
+                            },
+
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Interview",
+
+                                color:
+                                    "#64748b"
+
+                            }
+
+                        },
+
+
+                        y: {
+
+                            min: 0,
+
+                            max: 10,
+
+
+                            ticks: {
+
+                                stepSize: 1,
+
+                                color:
+                                    "#94a3b8"
+
+                            },
+
+
+                            grid: {
+
+                                color:
+                                    "rgba(255,255,255,0.06)"
+
+                            },
+
+
+                            title: {
+
+                                display: true,
+
+                                text:
+                                    "Score",
+
+                                color:
+                                    "#64748b"
+
+                            }
+
+                        }
+
+                    },
+
+
+                    plugins: {
+
+                        legend: {
+
+                            display: true,
+
+
+                            labels: {
+
+                                color:
+                                    "#cbd5e1",
+
+                                usePointStyle:
+                                    true,
+
+                                padding: 20
+
+                            }
+
+                        },
+
+
+                        tooltip: {
+
+                            backgroundColor:
+                                "rgba(15,23,42,0.95)",
+
+
+                            borderColor:
+                                "rgba(129,140,248,0.35)",
+
+
+                            borderWidth: 1,
+
+
+                            titleColor:
+                                "#ffffff",
+
+
+                            bodyColor:
+                                "#cbd5e1",
+
+
+                            padding: 12,
+
+
+                            displayColors: false,
+
+
+                            callbacks: {
+
+                                label:
+                                    function (
+                                        context
+                                    ) {
+
+                                        return (
+                                            "Score: " +
+                                            context.parsed.y +
+                                            " / 10"
+                                        );
+
+                                    }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+    }
+);
+
+</script>
+
+{% endif %}
+
+</body>
+
+</html>
